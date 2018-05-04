@@ -6,4 +6,4 @@ phases:
 artifacts:
   type: zip
   files:
-    - OutputSamTemplate.yaml
+    - **/*
