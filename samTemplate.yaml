@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+# create a function and API gateway to return hello world
+
+# global variable definitions
+Globals:
+  Function:
+    Runtime: python2.7
+    Timeout: 10
+
+Resources:
+  # helloworld function <- this is the main, actual function
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: aacorne-variable-replacer
+      Description: aacorne-variable-replacer
+      Handler: variable_replacer.lambda_handler
+      Role: arn:aws:iam::282415712953:role/aacorne-lambdainvoke-role
+      # set up versioning and an alias
+      AutoPublishAlias: prod
+      CodeUri: ../src/variable_replacer.py
+      Tags:
+        Owner: aacorne
+        Status: active
+        Environment: development
+        Name: aacorne-variable-replacer
+      Tracing: Active
+      # safe mode, ie rolling deployments
+      DeploymentPreference:
+        # one of:
+        # Canary10Percent30Minutes
+        # Canary10Percent5Minutes
+        # Canary10Percent10Minutes
+        # Canary10Percent15Minutes
+        # Linear10PercentEvery10Minutes
+        # Linear10PercentEvery1Minute
+        # Linear10PercentEvery2Minutes
+        # Linear10PercentEvery3Minutes
+        # AllAtOnce
+        Type: AllAtOnce
+        #Alarms:
+          # A list of alarms that you want to monitor
+          #- !Ref AliasErrorMetricGreaterThanZeroAlarm
+          #- !Ref LatestVersionErrorMetricGreaterThanZeroAlarm
+
+#  # CW Alarm to monitor the new Lambda version for errors
+#  AliasErrorMetricGreaterThanZeroAlarm:
+#    Type: AWS::CloudWatch::Alarm
+#    Properties:
+#      AlarmName: !Sub aacorne-variable-replacer-alias-${HelloWorldFunction}
+#      AlarmDescription: "pre-deployment alarm to check for errors in the function"
+#      #AlarmActions:
+#      #  - !Ref AlarmTopic
+#      ComparisonOperator: GreaterThanOrEqualToThreshold
+#      Dimensions:
+#        - Name: FunctionName
+#          Value: !Ref HelloWorldFunction
+#      EvaluationPeriods: 1
+#      MetricName: Errors
+#      Namespace: AWS/Lambda
+#      Period: '60'
+#      Statistic: Sum
+#      Threshold: '1'
+#
+#  # CW Alarm to monitor the new Lambda version for errors
+#  LatestVersionErrorMetricGreaterThanZeroAlarm:
+#    Type: AWS::CloudWatch::Alarm
+#    Properties:
+#      AlarmName: !Sub aahelloworld-safemode-latestversion-${HelloWorldFunction}
+#      AlarmDescription: "pre-deployment alarm to check for errors in the function"
+#      #AlarmActions:
+#      #  - !Ref AlarmTopic
+#      ComparisonOperator: GreaterThanOrEqualToThreshold
+#      TreatMissingData: missing
+#      Dimensions:
+#        - Name: FunctionName
+#          Value: !Ref HelloWorldFunction
+#        - Name: Resource
+#          Value: !Join [":", [!Ref HelloWorldFunction, !Select ["7", !Split [":", !Ref HelloWorldFunction.Version]]]]
+#      EvaluationPeriods: 1
+#      MetricName: Errors
+#      Namespace: AWS/Lambda
+#      Period: '60'
+#      Statistic: Sum
+#      Threshold: '1'
+#
