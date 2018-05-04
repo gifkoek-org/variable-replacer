@@ -4,6 +4,6 @@ phases:
     commands:
       - pip install jinja2 markupsafe
 artifacts:
-  type: zip
   files:
-    - **/*
+    - "**/*"
+  #type: zip
