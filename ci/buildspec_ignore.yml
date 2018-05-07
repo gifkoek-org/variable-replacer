@@ -1,0 +1,9 @@
+version: 0.1
+phases:
+  install:
+    commands:
+      - pip install jinja2 markupsafe
+artifacts:
+  files:
+    - "**/*"
+  #type: zip
