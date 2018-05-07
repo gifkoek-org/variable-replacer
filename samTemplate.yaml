@@ -20,7 +20,7 @@ Resources:
       Role: arn:aws:iam::282415712953:role/aacorne-lambdainvoke-role
       # set up versioning and an alias
       AutoPublishAlias: prod
-      CodeUri: src/variable_replacer.py
+      CodeUri: ./src/
       Tags:
         Owner: aacorne
         Status: active
